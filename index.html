@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>Café Delight | Botanical Roastery, Kitchen & Lounge</title>
+  <style>
+    :root {
+      --olive: #3d4f2f;
+      --olive-deep: #212c18;
+      --olive-mid: #556b43;
+      --sage: #73885f;
+      --gold: #d4af37;
+      --gold-soft: #f5e6b3;
+      --cream: #f7f8f3;
+      --surface: #ffffff;
+      --tint: #edf1e7;
+      --ink: #1b2414;
+      --muted: #56634b;
+      --border: #d7e0cc;
+      --danger: #b91c1c;
+      --success: #166534;
+      --shadow: 0 16px 38px rgba(33, 44, 24, 0.10);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', 'Segoe UI', system-ui, -apple-system, sans-serif; }
+    html, body { max-width: 100%; overflow-x: hidden; background: var(--cream); color: var(--ink); line-height: 1.6; scroll-behavior: smooth; }
+
+    /* AMBIENT FLOATING BLOBS */
+    .blob {
+      position: fixed; border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+      filter: blur(85px); z-index: -1; opacity: 0.36; pointer-events: none;
+      animation: morphBlob 14s ease-in-out infinite alternate;
+    }
+    .blob-1 { width: 360px; height: 360px; background: #7f9a65; top: -80px; right: -60px; }
+    .blob-2 { width: 320px; height: 320px; background: #e3c468; bottom: 4%; left: -80px; animation-delay: -6s; }
+    @keyframes morphBlob {
+      0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; transform: translate(0, 0) scale(1); }
+      100% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; transform: translate(-25px, 35px) scale(1.12); }
+    }
+
+    /* FLOATING CAPSULE NAVBAR WITH LOGO.JPG */
+    .nav-shell { position: sticky; top: 12px; z-index: 60; padding: 0 14px; }
+    header {
+      max-width: 1160px; margin: 0 auto;
+      background: rgba(33, 44, 24, 0.94);
+      backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(212, 175, 55, 0.38);
+      border-radius: 999px;
+      padding: 10px 22px;
+      box-shadow: 0 12px 32px rgba(33, 44, 24, 0.28);
+    }
+    .mast {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 11px; cursor: pointer;
+      color: #fff; font-weight: 800; font-size: 1.28rem;
+    }
+    .brand-logo {
+      width: 48px; height: 48px; border-radius: 50%; object-fit: contain;
+      background: #141c0e; padding: 3px; border: 1.5px solid var(--gold);
+      box-shadow: 0 4px 16px rgba(212, 175, 55, 0.45);
+      transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+      flex-shrink: 0;
+    }
+    .brand:hover .brand-logo { transform: rotate(10deg) scale(1.08); }
+    .brand-sub { display: block; font-size: 0.66rem; font-weight: 700; color: var(--gold-soft); letter-spacing: 0.14em; text-transform: uppercase; }
+
+    nav { display: flex; gap: 5px; flex-wrap: wrap; background: rgba(255, 255, 255, 0.08); padding: 4px; border-radius: 999px; }
+    .nav-btn {
+      background: transparent; color: #e6eedc; border: none;
+      padding: 8px 14px; border-radius: 999px; font-weight: 700; font-size: 0.82rem;
+      cursor: pointer; transition: all 0.25s ease; white-space: nowrap;
+    }
+    .nav-btn:hover { color: #fff; background: rgba(255,255,255,0.12); }
+    .nav-btn.active {
+      background: linear-gradient(135deg, var(--gold), #e8c762);
+      color: var(--olive-deep);
+      box-shadow: 0 4px 14px rgba(212, 175, 55, 0.4);
+    }
+
+    @media (max-width: 760px) {
+      .nav-shell { top: 6px; padding: 0 8px; }
+      header { border-radius: 28px; padding: 10px 14px; }
+      .mast { flex-direction: column; align-items: stretch; }
+      .brand { justify-content: center; }
+      nav { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; width: 100%; border-radius: 20px; }
+      .nav-btn { text-align: center; padding: 7px 4px; font-size: 0.76rem; }
+    }
+
+    main { max-width: 1160px; margin: 22px auto; padding: 0 16px 110px; }
+    .page-view { display: none; }
+    .page-view.active { display: block; animation: curveReveal 0.45s cubic-bezier(0.22, 1, 0.36, 1); }
+    @keyframes curveReveal {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CURVY WAVE HERO SECTION */
+    .curvy-hero {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #212c18 0%, #3d4f2f 55%, #556b43 100%);
+      color: #fff; border-radius: 44px; padding: 44px 38px 66px;
+      display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 28px; align-items: center;
+      margin-bottom: 30px; box-shadow: 0 22px 52px rgba(33, 44, 24, 0.28);
+      border: 1.5px solid rgba(212, 175, 55, 0.38);
+    }
+    .hero-wave {
+      position: absolute; bottom: -1px; left: 0; width: 100%; height: 42px;
+      fill: var(--cream); pointer-events: none;
+    }
+    @media (max-width: 840px) {
+      .curvy-hero { grid-template-columns: 1fr; padding: 28px 22px 56px; border-radius: 32px; }
+      .arch-blob { height: 230px !important; border-radius: 36px !important; }
+    }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(212, 175, 55, 0.16); border: 1px solid rgba(212, 175, 55, 0.45);
+      color: var(--gold-soft); padding: 5px 15px; border-radius: 999px;
+      font-size: 0.78rem; font-weight: 700; margin-bottom: 14px;
+    }
+    .curvy-hero h1 { font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.15; margin-bottom: 14px; letter-spacing: -0.02em; }
+    .curvy-hero h1 span { color: var(--gold-soft); }
+    .curvy-hero p { color: #e4ecd9; font-size: 0.98rem; margin-bottom: 24px; max-width: 54ch; }
+
+    .arch-blob {
+      position: relative; overflow: hidden; height: 305px;
+      border-radius: 150px 150px 36px 36px;
+      border: 3px solid rgba(212, 175, 55, 0.5);
+      box-shadow: 0 22px 45px rgba(0, 0, 0, 0.38);
+      animation: floatArch 5.5s ease-in-out infinite;
+    }
+    @keyframes floatArch {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-7px); }
+    }
+    .arch-blob img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s ease; }
+    .arch-blob:hover img { transform: scale(1.07); }
+
+    /* PILL BUTTONS */
+    .btn {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, var(--olive), var(--olive-mid));
+      color: #fff; border: none; padding: 11px 24px;
+      border-radius: 999px; font-weight: 700; font-size: 0.9rem; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+      transition: transform 0.2s ease, box-shadow 0.25s ease; min-height: 43px;
+    }
+    .btn::before {
+      content: ""; position: absolute; top: 0; left: -100%; width: 60%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.28), transparent);
+      transition: left 0.55s ease;
+    }
+    .btn:hover::before { left: 130%; }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 22px rgba(61, 79, 47, 0.32); }
+    .btn:active { transform: scale(0.97); }
+    .btn-gold {
+      background: linear-gradient(135deg, var(--gold), #e8c762);
+      color: var(--olive-deep);
+    }
+    .btn-gold:hover { box-shadow: 0 8px 22px rgba(212, 175, 55, 0.42); }
+    .btn-ghost { background: transparent; color: var(--olive); border: 1.5px solid var(--border); }
+    .btn-ghost:hover { border-color: var(--olive); background: var(--tint); box-shadow: none; }
+
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; width: 100%; }
+      .hero-actions .btn { width: 100%; }
+    }
+
+    /* CURVY RIBBON */
+    .ribbon {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px; margin-bottom: 30px;
+    }
+    .rib-item {
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 28px;
+      padding: 16px 20px; display: flex; align-items: center; gap: 13px;
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+    .rib-item:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: var(--shadow); }
+    .rib-icon {
+      width: 44px; height: 44px; border-radius: 50%; background: var(--tint);
+      color: var(--olive); display: grid; place-items: center; font-weight: 800; flex-shrink: 0; font-size: 0.92rem;
+    }
+    .rib-item b { display: block; font-size: 0.95rem; color: var(--olive-deep); }
+    .rib-item span { font-size: 0.8rem; color: var(--muted); }
+
+    .sec-head { display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap; gap: 10px; margin: 28px 0 16px; }
+    .sec-head h2 { font-size: clamp(1.35rem, 3vw, 1.65rem); color: var(--olive-deep); letter-spacing: -0.02em; }
+    .sec-head p { color: var(--muted); font-size: 0.9rem; }
+
+    /* CURVY MENU CARDS + +1 BADGE ANIMATION */
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+    .m-card {
+      position: relative;
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 32px;
+      overflow: hidden; box-shadow: var(--shadow); display: flex; flex-direction: column; justify-content: space-between;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease, border-color 0.3s ease;
+      animation: cardPop 0.45s ease backwards;
+    }
+    @keyframes cardPop {
+      from { opacity: 0; transform: translateY(16px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .m-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--gold);
+      box-shadow: 0 18px 42px rgba(61, 79, 47, 0.16);
+    }
+    .m-card .img-box {
+      position: relative;
+      overflow: hidden; height: 192px; background: var(--tint);
+      border-radius: 0 0 28px 28px;
+    }
+    .m-card img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.55s ease; }
+    .m-card:hover img { transform: scale(1.08); }
+    .mc-body { padding: 17px 19px 19px; display: flex; flex-direction: column; gap: 8px; flex: 1; justify-content: space-between; }
+    .tag { background: var(--tint); color: var(--olive); font-size: 0.72rem; padding: 3px 11px; border-radius: 999px; font-weight: 700; display: inline-block; }
+    .tag-veg { background: #dcfce7; color: #166534; }
+    .tag-bar { background: #fef3c7; color: #92400e; }
+    .tag-hot { background: #ffedd5; color: #9a3412; }
+    .meta { font-size: 0.84rem; color: var(--muted); }
+    .price { font-weight: 800; font-size: 1.2rem; color: var(--olive-deep); }
+    .row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; position: relative; }
+
+    /* FLOATING +1 POP ANIMATION ON PRODUCT CARD */
+    .plus-one-pop {
+      position: absolute;
+      right: 14px;
+      bottom: 44px;
+      background: linear-gradient(135deg, var(--gold), #f3d46b);
+      color: var(--olive-deep);
+      font-weight: 900;
+      font-size: 0.9rem;
+      padding: 4px 12px;
+      border-radius: 999px;
+      border: 1.5px solid var(--olive-deep);
+      box-shadow: 0 6px 18px rgba(33, 44, 24, 0.25);
+      pointer-events: none;
+      z-index: 15;
+      animation: floatPlusOne 0.95s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+    @keyframes floatPlusOne {
+      0% { opacity: 0; transform: translateY(10px) scale(0.6); }
+      25% { opacity: 1; transform: translateY(-6px) scale(1.12); }
+      75% { opacity: 1; transform: translateY(-20px) scale(1); }
+      100% { opacity: 0; transform: translateY(-34px) scale(0.9); }
+    }
+
+    .qty-pill-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(33, 44, 24, 0.92);
+      color: var(--gold-soft);
+      border: 1.5px solid var(--gold);
+      font-size: 0.75rem;
+      font-weight: 800;
+      padding: 4px 11px;
+      border-radius: 999px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.28);
+      z-index: 5;
+    }
+
+    /* BOTTOM FLOATING TRAY POPUP BAR (LAPTOP & MOBILE) */
+    .tray-toast {
+      position: fixed;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%) translateY(130%);
+      width: calc(100% - 28px);
+      max-width: 580px;
+      background: linear-gradient(135deg, var(--olive-deep), var(--olive));
+      color: #fff;
+      border: 1.5px solid var(--gold);
+      border-radius: 999px;
+      padding: 11px 16px 11px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 18px 44px rgba(20, 28, 14, 0.42);
+      z-index: 95;
+      transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .tray-toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .toast-info { display: flex; flex-direction: column; min-width: 0; }
+    .toast-title {
+      font-size: 0.88rem; font-weight: 800; color: var(--gold-soft);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .toast-sub { font-size: 0.77rem; color: #e4ecd9; }
+    .toast-cta {
+      background: linear-gradient(135deg, var(--gold), #e8c762);
+      color: var(--olive-deep);
+      border: none;
+      padding: 9px 18px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.84rem;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+    }
+    @media (max-width: 500px) {
+      .tray-toast {
+        bottom: 12px;
+        width: calc(100% - 20px);
+        border-radius: 26px;
+        padding: 10px 14px;
+      }
+      .toast-title { font-size: 0.82rem; }
+      .toast-sub { font-size: 0.73rem; }
+      .toast-cta { padding: 8px 14px; font-size: 0.8rem; }
+    }
+
+    .panel { background: var(--surface); border: 1.5px solid var(--border); border-radius: 32px; padding: 24px; box-shadow: var(--shadow); }
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    @media (max-width: 780px) { .two-col { grid-template-columns: 1fr; } }
+
+    .filter-bar { background: var(--surface); border: 1.5px solid var(--border); border-radius: 28px; padding: 14px; margin-bottom: 18px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+    .pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    .pill { padding: 7px 14px; border-radius: 999px; border: 1px solid var(--border); background: var(--cream); font-weight: 600; font-size: 0.81rem; cursor: pointer; color: var(--muted); transition: 0.2s; }
+    .pill.active { background: var(--olive); color: #fff; border-color: var(--olive); }
+    .search-row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; width: 100%; }
+    @media (min-width: 820px) { .search-row { width: auto; } }
+
+    input, select { width: 100%; padding: 11px 16px; border: 1.5px solid var(--border); border-radius: 999px; margin: 4px 0 11px; font-size: 16px; background: #fcfdf9; color: var(--ink); transition: border-color 0.2s; }
+    input:focus, select:focus { outline: none; border-color: var(--olive); background: #fff; }
+    .bill-card { background: var(--tint); border: 1px solid var(--border); padding: 16px 18px; border-radius: 24px; margin-top: 12px; font-size: 0.94rem; line-height: 1.8; }
+
+    /* COLORFUL & STYLIZED PAYMENT GATEWAY */
+    .sheet-backdrop {
+      display: none; position: fixed; inset: 0;
+      background: rgba(18, 26, 12, 0.78); backdrop-filter: blur(6px);
+      z-index: 105; align-items: flex-end; justify-content: center;
+    }
+    .sheet-backdrop.open { display: flex; animation: fadeBg 0.25s ease; }
+    @keyframes fadeBg { from { opacity: 0; } to { opacity: 1; } }
+
+    .curvy-sheet {
+      width: 100%; max-width: 540px; max-height: 92vh; overflow-y: auto;
+      background: var(--surface);
+      border-radius: 38px 38px 0 0;
+      border-top: 3px solid var(--gold);
+      box-shadow: 0 -20px 60px rgba(18, 26, 12, 0.45);
+      animation: slideUpSheet 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    @media (min-width: 640px) {
+      .sheet-backdrop { align-items: center; padding: 16px; }
+      .curvy-sheet { border-radius: 38px; border: 2px solid var(--gold); }
+    }
+    @keyframes slideUpSheet {
+      from { transform: translateY(100%); opacity: 0.5; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .sheet-handle { width: 48px; height: 5px; background: rgba(255,255,255,0.35); border-radius: 999px; margin: 0 auto 10px; }
+    .sheet-header {
+      background: linear-gradient(135deg, var(--olive-deep), var(--olive));
+      color: #fff; padding: 16px 24px 20px; text-align: center;
+      border-radius: 0 0 32px 32px;
+    }
+    .step-bar {
+      display: flex; justify-content: center; gap: 8px; margin-top: 12px; font-size: 0.74rem; font-weight: 700;
+    }
+    .step-chip { background: rgba(255,255,255,0.12); color: #e4ecd9; padding: 4px 11px; border-radius: 999px; }
+    .step-chip.on { background: var(--gold); color: var(--olive-deep); }
+
+    .sheet-body { padding: 20px 24px 24px; }
+    .mode-pills { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px; }
+    .mpill {
+      border: 1.5px solid var(--border); border-radius: 999px; padding: 9px 6px;
+      text-align: center; font-weight: 700; font-size: 0.81rem; cursor: pointer;
+      background: var(--cream); color: var(--muted); transition: 0.2s;
+    }
+    .mpill.active { border-color: var(--olive); background: var(--tint); color: var(--olive-deep); }
+
+    /* COLORFUL RAINBOW-JEWEL QR FRAME */
+    .qr-colorful-card {
+      position: relative;
+      background: linear-gradient(145deg, #f3f8ec 0%, #fff9eb 50%, #eef6ff 100%);
+      border: 2px solid #c9d8b6;
+      border-radius: 30px;
+      padding: 16px 14px;
+      text-align: center;
+      margin-bottom: 12px;
+      box-shadow: 0 10px 28px rgba(61, 79, 47, 0.10);
+    }
+    .qr-jewel-ring {
+      display: inline-block;
+      padding: 6px;
+      border-radius: 26px;
+      background: conic-gradient(from 45deg, #3d4f2f, #d4af37, #e06d53, #2b7a78, #6b8e23, #3d4f2f);
+      box-shadow: 0 8px 24px rgba(61, 79, 47, 0.24);
+      animation: jewelGlow 4s ease-in-out infinite alternate;
+    }
+    @keyframes jewelGlow {
+      0% { box-shadow: 0 6px 20px rgba(61, 79, 47, 0.24); }
+      100% { box-shadow: 0 10px 28px rgba(212, 175, 55, 0.42); }
+    }
+    .qr-jewel-ring img {
+      width: 136px; height: 136px; border-radius: 20px; display: block;
+      background: #faf8f2; padding: 5px;
+    }
+    .upi-rainbow-pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: #ffffff;
+      border: 1.5px solid #9ab082;
+      padding: 6px 14px; border-radius: 999px; margin-top: 10px; font-size: 0.82rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .copy-mini {
+      background: linear-gradient(135deg, #3d4f2f, #5e7849);
+      color: #fff; border: none; padding: 4px 11px; border-radius: 999px;
+      font-size: 0.74rem; font-weight: 700; cursor: pointer;
+    }
+    .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 11px; }
+    @media (max-width: 440px) { .app-grid { grid-template-columns: repeat(2, 1fr); } }
+    .app-btn {
+      display: block; text-align: center; padding: 7px 4px; border-radius: 999px;
+      background: #fff; border: 1.5px solid var(--border); color: var(--olive-deep);
+      text-decoration: none; font-weight: 700; font-size: 0.77rem; transition: 0.2s;
+    }
+    .app-btn:hover { background: var(--olive); color: #fff; border-color: var(--olive); }
+
+    .tracker { font-size: 0.81rem; padding: 10px 14px; border-radius: 18px; margin-top: 8px; font-weight: 600; background: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+    .tracker.fail { background: #fee2e2; color: var(--danger); border-color: #fca5a5; }
+    .tracker.ok { background: #dcfce7; color: var(--success); border-color: #86efac; }
+
+    /* RECEIPT MODAL */
+    .modal { display: none; position: fixed; inset: 0; background: rgba(18, 26, 12, 0.78); backdrop-filter: blur(4px); z-index: 110; place-items: center; padding: 14px; overflow-y: auto; }
+    .modal.open { display: grid; }
+    .rec-box { background: var(--surface); border-radius: 34px; max-width: 450px; width: 100%; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.4); animation: cardPop 0.3s ease; }
+    .rec-head { background: linear-gradient(135deg, var(--olive-deep), var(--olive)); color: #fff; padding: 18px 20px; text-align: center; border-bottom: 2px solid var(--gold); border-radius: 0 0 26px 26px; }
+    .receipt-paper { background: #fcfdf9; border: 1.5px dashed #9cb089; border-radius: 20px; padding: 14px; margin-top: 8px; font-size: 0.86rem; }
+    .rl { display: flex; justify-content: space-between; padding: 4px 0; gap: 8px; }
+
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; background: var(--surface); border: 1.5px solid var(--border); border-radius: 26px; box-shadow: var(--shadow); margin-top: 12px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 660px; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e4ece0; }
+    th { background: var(--tint); color: var(--olive-deep); font-weight: 700; }
+
+    footer { background: var(--olive-deep); color: #dce6d1; text-align: center; padding: 32px 16px; font-size: 0.88rem; line-height: 1.75; border-radius: 36px 36px 0 0; border-top: 2px solid rgba(212, 175, 55, 0.35); }
+  </style>
+</head>
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="nav-shell">
+    <header>
+      <div class="mast">
+        <div class="brand" onclick="switchPage('home')">
+          <img src="logo.jpg?v=3" alt="Café Delight Logo" class="brand-logo" onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%23212c18%22/><text x=%2250%22 y=%2260%22 font-family=%22Georgia,serif%22 font-size=%2236%22 font-weight=%22bold%22 fill=%22%23d4af37%22 text-anchor=%22middle%22>CD</text></svg>'" />
+          <div>
+            <span>Café Delight</span>
+            <span class="brand-sub">Roastery • Kitchen • Lounge</span>
+          </div>
+        </div>
+        <nav>
+          <button id="nav-home" class="nav-btn active" onclick="switchPage('home')">Home</button>
+          <button id="nav-menu" class="nav-btn" onclick="switchPage('menu')">Menu (29)</button>
+          <button id="nav-table" class="nav-btn" onclick="switchPage('table')">Book (₹500)</button>
+          <button id="nav-about" class="nav-btn" onclick="switchPage('about')">Story &amp; Visit</button>
+          <button id="nav-order" class="nav-btn" onclick="switchPage('order')">Tray (<span id="trayCount">0</span>)</button>
+          <button id="nav-logs" class="nav-btn" onclick="switchPage('logs')">Logs (<span id="logCount">0</span>)</button>
+        </nav>
+      </div>
+    </header>
+  </div>
+
+  <main>
+    <!-- PAGE 1: HOME -->
+    <section id="view-home" class="page-view active">
+      <div class="curvy-hero">
+        <div>
+          <span class="eyebrow">✦ Main Bidholi Road, Near UPES Campus • Dehradun</span>
+          <h1>Botanical Roasts, <span>Artisanal Kitchen</span> &amp; Whisky Lounge</h1>
+          <p>Savor Truffle Margherita sourdough pizzas, wild mushroom ravioli, fiery sizzlers, smoky burgers, single-estate coffee, branded whiskies, and ₹1 Melody treats.</p>
+          <div class="hero-actions" style="display:flex;gap:12px;flex-wrap:wrap">
+            <button class="btn btn-gold" onclick="switchPage('menu')">Explore Menu (29 Items) →</button>
+            <button class="btn" style="background:rgba(255,255,255,0.12);border:1px solid rgba(212,175,55,0.45)" onclick="switchPage('table')">🪑 Reserve Lounge Table (₹500)</button>
+          </div>
+        </div>
+        <div class="arch-blob">
+          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=900&q=80" alt="Café Delight Botanical Interior" />
+        </div>
+        <svg class="hero-wave" viewBox="0 0 1440 70" preserveAspectRatio="none">
+          <path d="M0,30 C360,80 1080,-10 1440,35 L1440,70 L0,70 Z"></path>
+        </svg>
+      </div>
+
+      <div class="ribbon">
+        <div class="rib-item"><div class="rib-icon">🍕</div><div><b>Pizza, Ravioli &amp; Sizzlers</b><span>Stone-baked crusts, burgers &amp; hot platters</span></div></div>
+        <div class="rib-item"><div class="rib-icon">🥃</div><div><b>Branded Whisky &amp; Vodka</b><span>Chivas, Jack Daniel's, Black Label &amp; coolers</span></div></div>
+        <div class="rib-item"><div class="rib-icon">5%</div><div><b>Transparent 5% GST</b><span>Clear tax breakdown on every invoice</span></div></div>
+        <div class="rib-item"><div class="rib-icon">🪑</div><div><b>₹500 Table Reservation</b><span>Instant slot booking with live history log</span></div></div>
+      </div>
+
+      <div class="sec-head">
+        <div>
+          <h2>Chef &amp; Sommelier Signatures</h2>
+          <p>Tap any bestseller below to add (+1) straight to your tray.</p>
+        </div>
+        <button class="btn btn-ghost" onclick="switchPage('menu')">View Full Menu (29 Items)</button>
+      </div>
+
+      <div class="grid">
+        <div class="m-card">
+          <div class="img-box"><img src="https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80" alt="Truffle Burrata Margherita Pizza" /></div>
+          <div class="mc-body">
+            <div><span class="tag tag-hot">Chef Signature • Pizza</span><h3 style="margin-top:7px">Truffle Burrata Margherita Pizza</h3><p class="meta">10-inch sourdough crust, creamy burrata, San Marzano tomatoes &amp; fresh garden basil.</p></div>
+            <div class="row" style="margin-top:8px"><span class="price">₹370</span><button class="btn" style="padding:8px 16px" onclick="addToCart(101, this)">+ Add • ₹370</button></div>
+          </div>
+        </div>
+
+        <div class="m-card">
+          <div class="img-box"><img src="https://images.unsplash.com/photo-1527281400683-1aae777175f8?auto=format&fit=crop&w=600&q=80" alt="Chivas Regal 12Y Scotch Whisky" /></div>
+          <div class="mc-body">
+            <div><span class="tag tag-bar">Branded Whisky • 60 ml</span><h3 style="margin-top:7px">Chivas Regal 12Y Blended Scotch</h3><p class="meta">Rich Speyside blended Scotch whisky with honeyed orchard fruit, vanilla &amp; hazelnut notes.</p></div>
+            <div class="row" style="margin-top:8px"><span class="price">₹490</span><button class="btn" style="padding:8px 16px" onclick="addToCart(201, this)">+ Add • ₹490</button></div>
+          </div>
+        </div>
+
+        <div class="m-card">
+          <div class="img-box"><img src="https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" alt="Peri-Peri Cottage Cheese Sizzler" /></div>
+          <div class="mc-body">
+            <div><span class="tag tag-hot">Hot Platter • Sizzler</span><h3 style="margin-top:7px">Peri-Peri Cottage Cheese Sizzler</h3><p class="meta">Flame-grilled peri-peri paneer steaks on sizzling iron skillet with herb rice &amp; fries.</p></div>
+            <div class="row" style="margin-top:8px"><span class="price">₹395</span><button class="btn" style="padding:8px 16px" onclick="addToCart(103, this)">+ Add • ₹395</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel two-col" style="margin-top:30px;align-items:center">
+        <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=700&q=80" alt="Café Delight Roastery" style="width:100%;height:245px;object-fit:cover;border-radius:26px" />
+        <div>
+          <span class="tag" style="margin-bottom:8px">The Delight Experience</span>
+          <h2 style="font-size:1.48rem;color:var(--olive-deep);margin-bottom:10px">Botanical Olive Hospitality, Crafted Every Hour</h2>
+          <p class="meta" style="font-size:0.92rem;margin-bottom:10px">Located steps from UPES Bidholi, Café Delight blends single-estate Chikmagalur coffee craftsmanship with stone-baked pizzas, ravioli pasta, sizzlers, burgers, and branded whiskies.</p>
+          <p class="meta" style="font-size:0.92rem;margin-bottom:16px">Enjoy transparent 5% GST invoicing, colorful instant UPI verification, and ₹500 lounge table reservations.</p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn" onclick="switchPage('menu')">Explore Full Menu</button>
+            <button class="btn btn-ghost" onclick="switchPage('table')">Book Table &amp; History</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 2: FULL MENU -->
+    <section id="view-menu" class="page-view">
+      <div class="sec-head">
+        <div>
+          <h2>Café, Kitchen &amp; Bar Menu (Prices in ₹ + 5% GST)</h2>
+          <p>Apply promo code <b>DELIGHT20</b> in your tray on orders ₹300+ for 20% off.</p>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <div class="pills">
+          <button class="pill active" onclick="filterCat('All', this)">All (29)</button>
+          <button class="pill" onclick="filterCat('Pizza, Pasta & Sizzlers', this)">🍕 Pizza, Pasta, Burgers &amp; Sizzlers</button>
+          <button class="pill" onclick="filterCat('Bar & Spirits', this)">🥃 Branded Whisky, Vodka &amp; Shots</button>
+          <button class="pill" onclick="filterCat('Cocktails & Mocktails', this)">🍹 Cocktails &amp; Mocktails</button>
+          <button class="pill" onclick="filterCat('Cold Drinks & Water', this)">🥤 Cold Drinks &amp; Water</button>
+          <button class="pill" onclick="filterCat('Coffee & Chai', this)">☕ Coffee &amp; Chai</button>
+          <button class="pill" onclick="filterCat('Bakery & Desserts', this)">🥐 Bakery, Fries &amp; Desserts</button>
+        </div>
+        <div class="search-row">
+          <input id="searchBox" placeholder="Search chivas, jack daniels, pizza, sizzler..." oninput="renderMenu()" style="flex:1;min-width:215px;margin:0;padding:8px 14px" />
+          <label style="font-weight:600;font-size:0.86rem;cursor:pointer;white-space:nowrap"><input type="checkbox" id="veganOnly" onchange="renderMenu()" style="width:auto;margin:0 6px 0 0" />Vegan / Pure</label>
+        </div>
+      </div>
+
+      <div class="grid" id="menuGrid"></div>
+    </section>
+
+    <!-- PAGE 3: BOOK A TABLE (₹500 + 5% GST) + BOOKING HISTORY -->
+    <section id="view-table" class="page-view">
+      <div class="sec-head">
+        <div>
+          <h2>Reserve a Table at Café Delight (₹500 + 5% GST)</h2>
+          <p>Lock your booth for ₹525 (₹500 + ₹25 GST) via UPI/Card—₹500 redeemable against your dining &amp; bar bill.</p>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <img src="https://images.unsplash.com/photo-1559925393-8be0ec4767c8?auto=format&fit=crop&w=700&q=80" alt="Delight Lounge Seating" style="width:100%;height:215px;object-fit:cover;border-radius:24px;margin-bottom:14px" />
+          <h3 style="color:var(--olive-deep);margin-bottom:8px">Seating Zones &amp; Reservation Policy</h3>
+          <p class="meta" style="margin-bottom:6px"><b>• Reservation Fee:</b> ₹500 + 5% GST (₹525 total; ₹500 adjustable in final bill).</p>
+          <p class="meta" style="margin-bottom:6px"><b>• Olive Garden Study Lounge:</b> Power sockets + 300 Mbps fiber Wi-Fi.</p>
+          <p class="meta" style="margin-bottom:6px"><b>• Whisky Bar &amp; Patio Booths:</b> Evening sizzlers, cocktails &amp; lounge music.</p>
+          <p class="meta"><b>• Address:</b> Main Bidholi Road, Near UPES Campus Gate, Dehradun 248007</p>
+        </div>
+
+        <div class="panel">
+          <form onsubmit="startTableBookingPayment(event)">
+            <h3 style="color:var(--olive-deep);margin-bottom:10px">Instant Table Reservation • ₹525 (Incl. GST)</h3>
+            <label style="font-weight:600;font-size:0.88rem">Full Name *</label>
+            <input id="bkName" required placeholder="Enter guest name" />
+            <label style="font-weight:600;font-size:0.88rem">Mobile Number (10 digits) *</label>
+            <input id="bkPhone" type="tel" pattern="[0-9]{10}" required placeholder="e.g. 9876543210" />
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+              <div>
+                <label style="font-weight:600;font-size:0.88rem">Date *</label>
+                <input id="bkDate" type="date" required />
+              </div>
+              <div>
+                <label style="font-weight:600;font-size:0.88rem">Guests *</label>
+                <select id="bkGuests">
+                  <option>2 Guests</option>
+                  <option>4 Guests</option>
+                  <option>6 Guests (VIP Olive Booth)</option>
+                  <option>1 Person (Solo Study)</option>
+                </select>
+              </div>
+            </div>
+            <label style="font-weight:600;font-size:0.88rem">Time Slot &amp; Zone</label>
+            <select id="bkSlot">
+              <option>11:00 AM — Olive Garden Study Lounge</option>
+              <option>02:30 PM — Window Espresso Bar</option>
+              <option>06:00 PM — Whisky Bar &amp; Sizzler Lounge</option>
+              <option>08:30 PM — Evening Patio Booth</option>
+            </select>
+            <button type="submit" class="btn" style="width:100%;margin-top:6px">Pay ₹525 &amp; Confirm Booking →</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- LIVE TABLE BOOKING HISTORY -->
+      <div class="sec-head" style="margin-top:32px">
+        <div>
+          <h2>Table Booking History (<span id="bkHistCount">0</span>)</h2>
+          <p>Verified table reservations saved in live lounge records.</p>
+        </div>
+        <button type="button" class="btn btn-ghost" onclick="clearBookingHistory()">Clear Booking History</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Booking ID</th>
+              <th>Guest Name &amp; Phone</th>
+              <th>Date &amp; Time Slot</th>
+              <th>Guests</th>
+              <th>Paid (Incl. GST)</th>
+              <th>UTR / Ref No.</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="bookingHistoryBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- PAGE 4: STORY & VISIT -->
+    <section id="view-about" class="page-view">
+      <div class="sec-head">
+        <div>
+          <h2>Our Story &amp; Bidholi Location</h2>
+          <p>Botanical specialty roastery, gourmet kitchen, and craft lounge in Dehradun.</p>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="panel">
+          <img src="https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=700&q=80" alt="Cafe Story" style="width:100%;height:215px;object-fit:cover;border-radius:24px;margin-bottom:14px" />
+          <h3 style="color:var(--olive-deep);margin-bottom:8px">The Café Delight Story</h3>
+          <p class="meta" style="margin-bottom:8px">Founded in 2026 in Bidholi, Dehradun, Café Delight pairs single-estate Chikmagalur coffee craftsmanship with stone-baked pizzas, ravioli pasta, burgers, sizzling platters, and an evening whisky &amp; cocktail lounge.</p>
+          <p class="meta">Every order comes with clear 5% GST billing and eco-friendly packaging.</p>
+        </div>
+        <div class="panel">
+          <img src="https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=700&q=80" alt="Location" style="width:100%;height:215px;object-fit:cover;border-radius:24px;margin-bottom:14px" />
+          <h3 style="color:var(--olive-deep);margin-bottom:8px">Visit Us in Dehradun</h3>
+          <p class="meta" style="margin-bottom:6px"><b>Address:</b> Main Bidholi Road, Near UPES Campus Gate, Bidholi, Dehradun, Uttarakhand 248007</p>
+          <p class="meta" style="margin-bottom:6px"><b>Hours:</b> Monday – Sunday, 7:30 AM to 11:30 PM</p>
+          <p class="meta" style="margin-bottom:14px"><b>Contact &amp; UPI:</b> +91 98370 41210 • <code>avinavmittal6461@okicici</code></p>
+          <div style="display:flex;gap:10px;flex-wrap:wrap">
+            <button class="btn" onclick="switchPage('menu')">Explore Menu →</button>
+            <button class="btn btn-ghost" onclick="switchPage('table')">Book Table (₹500)</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 5: TRAY & CHECKOUT -->
+    <section id="view-order" class="page-view">
+      <div class="sec-head">
+        <div>
+          <h2>Your Order Tray &amp; Checkout (5% GST Applied)</h2>
+          <p>Apply code <b>DELIGHT20</b> on orders ₹300+ and verify your payment to generate a receipt.</p>
+        </div>
+      </div>
+      <div class="two-col">
+        <div class="panel" style="display:flex;flex-direction:column;justify-content:space-between">
+          <div>
+            <h3 style="color:var(--olive-deep);margin-bottom:8px">Selected Items</h3>
+            <div id="cartContainer"></div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <input id="promoInput" placeholder="Promo code: DELIGHT20" style="margin:0" />
+              <button class="btn" type="button" onclick="applyPromo()">Apply</button>
+            </div>
+            <p id="promoMsg" style="font-size:0.84rem;margin-top:6px;font-weight:600"></p>
+          </div>
+          <div class="bill-card" id="billSummary"></div>
+        </div>
+
+        <div class="panel">
+          <form onsubmit="openOrderPaymentModal(event)">
+            <h3 style="color:var(--olive-deep);margin-bottom:10px">Pickup &amp; Customer Details</h3>
+            <label style="font-weight:600;font-size:0.88rem">Full Name *</label>
+            <input id="custName" required placeholder="Enter your full name" />
+            <label style="font-weight:600;font-size:0.88rem">Mobile Number (10 digits) *</label>
+            <input id="custPhone" type="tel" pattern="[0-9]{10}" required placeholder="e.g. 9876543210" />
+            <label style="font-weight:600;font-size:0.88rem">Order Mode</label>
+            <select id="custSlot">
+              <option>Express Counter Pickup (10–15 mins) — Bidholi</option>
+              <option>Olive Lounge Table Service — Near UPES Campus Gate</option>
+            </select>
+            <button type="submit" class="btn" style="width:100%;margin-top:8px">Open DelightPay Checkout →</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAGE 6: PAYMENT LOG -->
+    <section id="view-logs" class="page-view">
+      <div class="sec-head">
+        <div>
+          <h2>Counter Payment &amp; UTR Log</h2>
+          <p>Live record of all food, bar, and table booking transactions (including 5% GST).</p>
+        </div>
+        <button type="button" class="btn btn-ghost" onclick="clearLogs()">Clear Payment Logs</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Ref / Order ID</th>
+              <th>Customer &amp; Phone</th>
+              <th>Type &amp; App</th>
+              <th>UTR / Ref No.</th>
+              <th>Amount (Incl. GST)</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="logsTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <!-- BOTTOM FLOATING TRAY POPUP BAR (WORKS ON LAPTOP & MOBILE) -->
+  <div class="tray-toast" id="trayToast">
+    <div class="toast-info">
+      <span class="toast-title" id="toastTitle">+1 Item Added to Tray</span>
+      <span class="toast-sub" id="toastSub">1 Product in Tray • ₹0 (Incl. 5% GST)</span>
+    </div>
+    <button type="button" class="toast-cta" onclick="switchPage('order')">View Tray →</button>
+  </div>
+
+  <!-- CURVED BOTTOM-SHEET DELIGHTPAY GATEWAY WITH COLORFUL QR -->
+  <div class="sheet-backdrop" id="paySheetBackdrop" onclick="if(event.target===this) closePaymentModal()">
+    <div class="curvy-sheet">
+      <div class="sheet-header">
+        <div class="sheet-handle"></div>
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <span style="font-size:0.78rem;color:var(--gold-soft);font-weight:700" id="gwTitle">DelightPay Checkout</span>
+          <button type="button" onclick="closePaymentModal()" style="border:none;background:rgba(255,255,255,0.16);color:#fff;width:30px;height:30px;border-radius:50%;font-size:1rem;cursor:pointer">✕</button>
+        </div>
+        <div style="margin-top:6px">
+          <div style="font-size:0.8rem;color:#e4ecd9">Total Payable (Incl. 5% GST)</div>
+          <div style="font-size:2rem;font-weight:900;color:var(--gold-soft);line-height:1.15" id="modalPayAmt">₹0</div>
+        </div>
+        <div class="step-bar">
+          <span class="step-chip on">1. Choose Method</span>
+          <span class="step-chip on">2. Scan Colorful QR</span>
+          <span class="step-chip" id="step3Chip">3. Verify UTR</span>
+        </div>
+      </div>
+
+      <div class="sheet-body">
+        <div class="mode-pills">
+          <div class="mpill active" id="opt-upi" onclick="selectPayMode('upi')">📱 UPI / QR</div>
+          <div class="mpill" id="opt-card" onclick="selectPayMode('card')">💳 Card</div>
+          <div class="mpill" id="opt-cash" onclick="selectPayMode('cash')">💵 Counter</div>
+        </div>
+        <div id="payModeBody"></div>
+        <div id="trackerBox" class="tracker">⏳ Tracker: Waiting for payment &amp; 12-digit UTR...</div>
+        <button id="verifyPayBtn" type="button" class="btn btn-gold" style="width:100%;margin-top:12px" onclick="verifyPayment()">Verify &amp; Issue GST Receipt →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DIGITAL RECEIPT MODAL -->
+  <div class="modal" id="receiptModal">
+    <div class="rec-box">
+      <div class="rec-head">
+        <b style="font-size:1.12rem" id="recHeading">✅ Payment Verified</b>
+        <div style="font-size:0.78rem;color:var(--gold-soft)">Café Delight • Main Bidholi Road, Near UPES, Dehradun</div>
+      </div>
+      <div style="padding:18px 20px 20px">
+        <div class="receipt-paper" id="receiptBody"></div>
+        <div style="display:flex;gap:8px;margin-top:14px">
+          <button type="button" class="btn" style="flex:1" onclick="window.print()">🖨️ Print Receipt</button>
+          <button type="button" class="btn btn-ghost" style="flex:1" onclick="closeReceiptModal()">Done</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <b>Café Delight — Roastery, Kitchen &amp; Lounge</b><br />
+    Main Bidholi Road, Near UPES Campus Gate, Dehradun, Uttarakhand 248007
+  </footer>
+
+  <script>
+    const UPI_ID = "avinavmittal6461@okicici";
+    const BOOKING_BASE = 500;
+    const GST_RATE = 0.05;
+
+    const MENU = [
+      { id: 101, name: "Truffle Burrata Margherita Pizza", cat: "Pizza, Pasta & Sizzlers", price: 370, vegan: false, desc: "10-inch sourdough crust, creamy burrata, San Marzano tomatoes & fresh garden basil.", img: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?auto=format&fit=crop&w=600&q=80" },
+      { id: 102, name: "Wild Mushroom & Sage Ravioli Pasta", cat: "Pizza, Pasta & Sizzlers", price: 300, vegan: false, desc: "Hand-folded porcini ricotta ravioli tossed in brown-butter sage cream & parmesan.", img: "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=600&q=80" },
+      { id: 103, name: "Peri-Peri Cottage Cheese Sizzler", cat: "Pizza, Pasta & Sizzlers", price: 395, vegan: false, desc: "Flame-grilled peri-peri paneer steaks on sizzling iron skillet with herb rice & fries.", img: "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80" },
+      { id: 104, name: "Smoky Caramelized Onion & Cheddar Burger", cat: "Pizza, Pasta & Sizzlers", price: 215, vegan: false, desc: "Crispy herb patty, aged cheddar, balsamic caramelized onions & smoky aioli in brioche.", img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80" },
+      { id: 27, name: "Farmhouse Pesto & Olive Pizza", cat: "Pizza, Pasta & Sizzlers", price: 330, vegan: false, desc: "10-inch sourdough crust with basil pesto, Kalamata olives, roasted peppers & mozzarella.", img: "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=600&q=80" },
+      { id: 28, name: "Arrabbiata & Burrata Penne Pasta", cat: "Pizza, Pasta & Sizzlers", price: 265, vegan: false, desc: "Al dente penne in spicy garlic-tomato sauce crowned with fresh creamy burrata.", img: "https://images.unsplash.com/photo-1645112411341-6c4fd023714a?auto=format&fit=crop&w=600&q=80" },
+      { id: 201, name: "Chivas Regal 12Y Blended Scotch (60 ml)", cat: "Bar & Spirits", price: 490, vegan: true, desc: "Rich Speyside blended Scotch whisky with honeyed orchard fruit, vanilla & hazelnut notes.", img: "https://images.unsplash.com/photo-1527281400683-1aae777175f8?auto=format&fit=crop&w=600&q=80" },
+      { id: 202, name: "Jack Daniel's Old No. 7 Whiskey (60 ml)", cat: "Bar & Spirits", price: 460, vegan: true, desc: "Charcoal-mellowed Tennessee whiskey with toasted oak, caramel & warm vanilla finish.", img: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?auto=format&fit=crop&w=600&q=80" },
+      { id: 203, name: "Johnnie Walker Black Label 12Y (60 ml)", cat: "Bar & Spirits", price: 510, vegan: true, desc: "Iconic 12-year blended Scotch layered with dark fruit, sweet vanilla & signature peat smoke.", img: "https://images.unsplash.com/photo-1514361892635-6b07e31e75f9?auto=format&fit=crop&w=600&q=80" },
+      { id: 108, name: "The Glenlivet 12Y Single Malt (60 ml)", cat: "Bar & Spirits", price: 540, vegan: true, desc: "Classic Speyside single malt Scotch aged in American oak with pineapple & floral notes.", img: "https://images.unsplash.com/photo-1527281400683-1aae777175f8?auto=format&fit=crop&w=600&q=80" },
+      { id: 14, name: "Grey Goose French Craft Vodka (60 ml)", cat: "Bar & Spirits", price: 340, vegan: true, desc: "Ultra-smooth Picardy winter-wheat vodka served chilled, on the rocks, or with lime.", img: "https://images.unsplash.com/photo-1569529465841-dfecdab7503b?auto=format&fit=crop&w=600&q=80" },
+      { id: 18, name: "Patrón Silver Tequila & Espresso Shots (2 Pcs)", cat: "Bar & Spirits", price: 280, vegan: true, desc: "Twin chilled agave & roasted coffee shots served with Himalayan salt & orange wedge.", img: "https://images.unsplash.com/photo-1514361892635-6b07e31e75f9?auto=format&fit=crop&w=600&q=80" },
+      { id: 106, name: "Cîroc Peach Vodka Fizz (Vodka Mocktail)", cat: "Cocktails & Mocktails", price: 320, vegan: true, desc: "French grape vodka shaken with white peach purée, fresh lime & chilled soda.", img: "https://images.unsplash.com/photo-1551538827-9c037cb4f32a?auto=format&fit=crop&w=600&q=80" },
+      { id: 24, name: "Green Apple Vodka Fizz (Vodka Mocktail)", cat: "Cocktails & Mocktails", price: 295, vegan: true, desc: "Crisp green apple & elderflower infusion shaken with triple-distilled vodka & soda.", img: "https://images.unsplash.com/photo-1560512823-829485b8bf24?auto=format&fit=crop&w=600&q=80" },
+      { id: 25, name: "Blood Orange Vodka Cooler (Vodka Mocktail)", cat: "Cocktails & Mocktails", price: 310, vegan: true, desc: "Fresh Himalayan blood orange juice, craft vodka & rosemary over crushed ice.", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" },
+      { id: 26, name: "Watermelon Basil Vodka Cooler (Vodka Mocktail)", cat: "Cocktails & Mocktails", price: 300, vegan: true, desc: "Cold-pressed watermelon, sweet garden basil, lemon & smooth vodka.", img: "https://images.unsplash.com/photo-1587223962930-cb7f31384c19?auto=format&fit=crop&w=600&q=80" },
+      { id: 16, name: "Delight Espresso Martini Cocktail", cat: "Cocktails & Mocktails", price: 345, vegan: true, desc: "Triple-distilled vodka shaken with fresh Chikmagalur espresso & coffee liqueur.", img: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=600&q=80" },
+      { id: 107, name: "Rose Lychee Sparkler (Zero-Proof Mocktail)", cat: "Cocktails & Mocktails", price: 175, vegan: true, desc: "Damask rosewater, chilled lychee nectar, lime & sparkling tonic over crushed ice.", img: "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80" },
+      { id: 17, name: "Virgin Cucumber & Mint Mojito (Mocktail)", cat: "Cocktails & Mocktails", price: 165, vegan: true, desc: "Muddled garden mint, English cucumber, key lime & chilled sparkling club soda.", img: "https://images.unsplash.com/photo-1536935338788-846bb9981813?auto=format&fit=crop&w=600&q=80" },
+      { id: 105, name: "Pistachio Baklava Cheesecake Jar", cat: "Bakery & Desserts", price: 195, vegan: false, desc: "Creamy vanilla cheesecake layered with honey-roasted pistachios & crisp phyllo.", img: "https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=600&q=80" },
+      { id: 31, name: "Truffle Parmesan Loaded Fries", cat: "Bakery & Desserts", price: 160, vegan: false, desc: "Crisp golden skin-on fries tossed with white truffle oil, herbs & aged parmesan.", img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?auto=format&fit=crop&w=600&q=80" },
+      { id: 32, name: "Belgian Dark Chocolate Lava Cake", cat: "Bakery & Desserts", price: 165, vegan: false, desc: "Warm 70% dark cocoa fondant cake with a molten chocolate center & vanilla scoop.", img: "https://images.unsplash.com/photo-1624353365286-3f8d62daad51?auto=format&fit=crop&w=600&q=80" },
+      { id: 12, name: "Avocado & Truffle Mushroom Tartine", cat: "Bakery & Desserts", price: 240, vegan: true, desc: "Smashed Hass avocado, sautéed wild mushrooms & truffle oil on toasted sourdough.", img: "https://images.unsplash.com/photo-1504754524776-8f4f37790ca0?auto=format&fit=crop&w=600&q=80" },
+      { id: 13, name: "Melody Chocolaty Toffee", cat: "Bakery & Desserts", price: 1, vegan: false, desc: "Classic caramel & rich chocolaty center toffee—sweet counter treat.", img: "https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&w=600&q=80" },
+      { id: 33, name: "Peach & Elderflower Iced Tea", cat: "Cold Drinks & Water", price: 130, vegan: true, desc: "Chilled Assam black tea infused with ripe orchard peach, elderflower & fresh lemon.", img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=600&q=80" },
+      { id: 21, name: "Chilled Aerated Cold Drink (330 ml)", cat: "Cold Drinks & Water", price: 45, vegan: true, desc: "Ice-cold Coke / Sprite / Ginger Ale served in a frosted glass with lemon slice.", img: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80" },
+      { id: 22, name: "Himalayan Mineral Water Bottle (1 L)", cat: "Cold Drinks & Water", price: 20, vegan: true, desc: "Sealed natural mountain mineral drinking water bottle (chilled or room temp).", img: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?auto=format&fit=crop&w=600&q=80" },
+      { id: 1, name: "Adrak Elaichi Kulhad Chai", cat: "Coffee & Chai", price: 50, vegan: false, desc: "Crushed fresh ginger, green cardamom & Assam tea simmered in farm milk.", img: "https://images.unsplash.com/photo-1561336313-0bd5e0b27ec8?auto=format&fit=crop&w=600&q=80" },
+      { id: 3, name: "Pistachio Rose Flat White", cat: "Coffee & Chai", price: 190, vegan: false, desc: "Double Arabica espresso shot with silky micro-foamed milk & roasted pistachio cream.", img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80" }
+    ];
+
+    let cart = [];
+    let paymentLogs = JSON.parse(localStorage.getItem("cd_payment_logs") || "[]");
+    let bookingLogs = JSON.parse(localStorage.getItem("cd_booking_logs") || "[]");
+    let activeCat = "All";
+    let discountRate = 0;
+    let payMode = "upi";
+    let checkoutContext = "order";
+    let pendingBooking = null;
+    let toastTimer = null;
+    let subTotal = 0, discAmt = 0, gstAmt = 0, finalTotal = 0, activePayable = 0;
+
+    function switchPage(pageId) {
+      document.querySelectorAll(".page-view").forEach(p => p.classList.remove("active"));
+      document.getElementById("view-" + pageId).classList.add("active");
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+      document.getElementById("nav-" + pageId).classList.add("active");
+      if (pageId === "order") {
+        document.getElementById("trayToast").classList.remove("show");
+      }
+      if (pageId === "logs") renderLogs();
+      if (pageId === "table") renderBookingHistory();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function filterCat(cat, btn) {
+      activeCat = cat;
+      document.querySelectorAll(".pill").forEach(p => p.classList.remove("active"));
+      btn.classList.add("active");
+      renderMenu();
+    }
+
+    function getItemQty(id) {
+      const found = cart.find(c => c.id === id);
+      return found ? found.qty : 0;
+    }
+
+    function renderMenu() {
+      const veganOnly = document.getElementById("veganOnly").checked;
+      const query = document.getElementById("searchBox").value.trim().toLowerCase();
+      const filtered = MENU.filter(item =>
+        (activeCat === "All" || item.cat === activeCat) &&
+        (!veganOnly || item.vegan) &&
+        (item.name.toLowerCase().includes(query) || item.desc.toLowerCase().includes(query) || item.cat.toLowerCase().includes(query))
+      );
+      document.getElementById("menuGrid").innerHTML = filtered.length ? filtered.map((item, idx) => {
+        const qty = getItemQty(item.id);
+        return `
+        <div class="m-card" style="animation-delay:${Math.min(idx * 0.04, 0.45)}s">
+          <div class="img-box">
+            ${qty > 0 ? `<span class="qty-pill-badge">In Tray: ${qty}</span>` : ''}
+            <img src="${item.img}" alt="${item.name}" onerror="this.src='https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=600&q=80'" />
+          </div>
+          <div class="mc-body">
+            <div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap">
+                <span class="tag ${item.cat.includes('Bar') || item.cat.includes('Cocktails') ? 'tag-bar' : item.cat.includes('Pizza') ? 'tag-hot' : ''}">${item.cat}</span>
+                ${item.vegan ? '<span class="tag tag-veg">Vegan / Pure</span>' : ''}
+              </div>
+              <h3 style="margin-top:7px">${item.name}</h3>
+              <p class="meta" style="margin-top:4px">${item.desc}</p>
+            </div>
+            <div class="row" style="margin-top:10px">
+              <span class="price">₹${item.price}</span>
+              <button type="button" class="btn" style="padding:8px 16px" onclick="addToCart(${item.id}, this)">+ Add${qty > 0 ? ` (${qty})` : ''}</button>
+            </div>
+          </div>
+        </div>`;
+      }).join("") : "<p class='meta'>No items match your search filter.</p>";
+    }
+
+    function spawnPlusOneBadge(btnEl) {
+      if (!btnEl) return;
+      const card = btnEl.closest(".m-card");
+      if (!card) return;
+      const badge = document.createElement("span");
+      badge.className = "plus-one-pop";
+      badge.textContent = "+1 Added";
+      card.appendChild(badge);
+      setTimeout(() => badge.remove(), 950);
+    }
+
+    function showTrayPopup(addedItemName) {
+      const totalItems = cart.reduce((sum, c) => sum + c.qty, 0);
+      const toast = document.getElementById("trayToast");
+      document.getElementById("toastTitle").textContent = `+1 ${addedItemName}`;
+      document.getElementById("toastSub").textContent = `${totalItems} Product${totalItems > 1 ? 's' : ''} in Tray • ₹${finalTotal} (Incl. 5% GST)`;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 4500);
+    }
+
+    function addToCart(id, btnEl) {
+      const found = cart.find(c => c.id === id);
+      if (found) found.qty += 1;
+      else cart.push({ id, qty: 1 });
+      renderCart();
+      renderMenu();
+      spawnPlusOneBadge(btnEl);
+      const itemObj = MENU.find(m => m.id === id);
+      if (itemObj) showTrayPopup(itemObj.name);
+    }
+
+    function changeQty(id, delta) {
+      const idx = cart.findIndex(c => c.id === id);
+      if (idx === -1) return;
+      cart[idx].qty += delta;
+      if (cart[idx].qty <= 0) cart.splice(idx, 1);
+      renderCart();
+      renderMenu();
+    }
+
+    function applyPromo() {
+      const code = document.getElementById("promoInput").value.trim().toUpperCase();
+      const msg = document.getElementById("promoMsg");
+      if (code === "DELIGHT20" && subTotal >= 300) {
+        discountRate = 0.20;
+        msg.style.color = "var(--success)";
+        msg.textContent = "DELIGHT20 applied! 20% discount unlocked.";
+      } else {
+        discountRate = 0;
+        msg.style.color = "var(--danger)";
+        msg.textContent = "Code DELIGHT20 requires an order subtotal of ₹300 or more.";
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      document.getElementById("trayCount").textContent = cart.reduce((sum, c) => sum + c.qty, 0);
+      document.getElementById("cartContainer").innerHTML = cart.length ? cart.map(c => {
+        const item = MENU.find(m => m.id === c.id);
+        return `
+          <div class="row" style="border-bottom:1px solid var(--border);padding:8px 0">
+            <span><b>${item.name}</b><br><small class="meta">₹${item.price} × ${c.qty}</small></span>
+            <div>
+              <button type="button" onclick="changeQty(${item.id}, -1)" style="padding:4px 11px;border-radius:999px;border:1px solid var(--border);cursor:pointer">-</button>
+              <b style="margin:0 7px">${c.qty}</b>
+              <button type="button" onclick="changeQty(${item.id}, 1)" style="padding:4px 11px;border-radius:999px;border:1px solid var(--border);cursor:pointer">+</button>
+            </div>
+          </div>`;
+      }).join("") : "<p class='meta'>Your tray is empty. Explore the Menu tab to add pizzas, whiskies, drinks, or desserts.</p>";
+
+      subTotal = cart.reduce((sum, c) => sum + MENU.find(m => m.id === c.id).price * c.qty, 0);
+      if (subTotal < 300 && discountRate > 0) {
+        discountRate = 0;
+        document.getElementById("promoMsg").textContent = "";
+      }
+      discAmt = Math.round(subTotal * discountRate);
+      const taxableAmt = subTotal - discAmt;
+      gstAmt = Math.round(taxableAmt * GST_RATE);
+      finalTotal = taxableAmt + gstAmt;
+
+      document.getElementById("billSummary").innerHTML = `
+        <div>Item Subtotal: <b>₹${subTotal}</b></div>
+        <div>Promo Discount: <b>-₹${discAmt}</b></div>
+        <div>GST (5%): <b>₹${gstAmt}</b></div>
+        <div style="font-size:1.12rem;color:var(--olive-deep);border-top:1px solid var(--border);margin-top:6px;padding-top:6px">Total Payable (Incl. GST): <b>₹${finalTotal}</b></div>
+      `;
+    }
+
+    function updateTracker(text, status) {
+      const box = document.getElementById("trackerBox");
+      box.className = "tracker" + (status ? " " + status : "");
+      box.textContent = text;
+    }
+
+    function copyUpiId() {
+      navigator.clipboard?.writeText(UPI_ID);
+      updateTracker("📋 Copied " + UPI_ID + "! Pay ₹" + activePayable + " in any UPI app & enter 12-digit UTR below.", "");
+    }
+
+    function launchUpi(appName, scheme) {
+      const sel = document.getElementById("payerApp");
+      if (sel) sel.value = appName;
+      updateTracker("📱 Opening " + appName + "... (If on Laptop, scan the colorful QR code with your phone)", "");
+      window.location.href = scheme;
+    }
+
+    function openOrderPaymentModal(e) {
+      e.preventDefault();
+      if (!cart.length) return alert("Your tray is empty! Add at least one item first.");
+      checkoutContext = "order";
+      activePayable = finalTotal;
+      document.getElementById("gwTitle").textContent = "DelightPay Order Checkout";
+      document.getElementById("modalPayAmt").textContent = "₹" + activePayable;
+      selectPayMode("upi");
+      document.getElementById("paySheetBackdrop").classList.add("open");
+    }
+
+    function startTableBookingPayment(e) {
+      e.preventDefault();
+      checkoutContext = "booking";
+      const bkGst = Math.round(BOOKING_BASE * GST_RATE);
+      activePayable = BOOKING_BASE + bkGst;
+      pendingBooking = {
+        name: document.getElementById("bkName").value.trim(),
+        phone: document.getElementById("bkPhone").value.trim(),
+        date: document.getElementById("bkDate").value,
+        guests: document.getElementById("bkGuests").value,
+        slot: document.getElementById("bkSlot").value,
+        base: BOOKING_BASE,
+        gst: bkGst,
+        total: activePayable
+      };
+      document.getElementById("gwTitle").textContent = "DelightPay Table Reservation";
+      document.getElementById("modalPayAmt").textContent = "₹" + activePayable;
+      selectPayMode("upi");
+      document.getElementById("paySheetBackdrop").classList.add("open");
+    }
+
+    function closePaymentModal() {
+      document.getElementById("paySheetBackdrop").classList.remove("open");
+    }
+
+    function selectPayMode(mode) {
+      payMode = mode;
+      document.querySelectorAll(".mpill").forEach(el => el.classList.remove("active"));
+      document.getElementById("opt-" + mode).classList.add("active");
+      const body = document.getElementById("payModeBody");
+      const note = checkoutContext === "booking" ? "DelightTable" : "CafeDelightOrder";
+      const params = `pa=${UPI_ID}&pn=Cafe%20Delight&am=${activePayable}&cu=INR&tn=${note}`;
+      const genericUpi = `upi://pay?${params}`;
+      const gpayUpi = `tez://upi/pay?${params}`;
+      const phonepeUpi = `phonepe://pay?${params}`;
+      const paytmUpi = `paytmmp://pay?${params}`;
+      const colorfulQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&color=2d3b1e&bgcolor=faf8f2&qzone=1&data=${encodeURIComponent(genericUpi)}`;
+
+      if (mode === "upi") {
+        updateTracker("⏳ Tracker: Scan colorful QR or pay ₹" + activePayable + " via UPI app, then enter 12-digit UTR.", "");
+        body.innerHTML = `
+          <div class="qr-colorful-card">
+            <div style="font-size:0.73rem;font-weight:800;letter-spacing:0.06em;text-transform:uppercase;color:#3d4f2f;margin-bottom:8px">✦ Instant Multi-App UPI QR ✦</div>
+            <div class="qr-jewel-ring">
+              <img src="${colorfulQrUrl}" alt="Colorful UPI QR ${UPI_ID}" />
+            </div>
+            <div>
+              <div class="upi-rainbow-pill">
+                <b style="color:#212c18">${UPI_ID}</b>
+                <button type="button" class="copy-mini" onclick="copyUpiId()">Copy UPI</button>
+              </div>
+            </div>
+            <div class="app-grid">
+              <a class="app-btn" href="${gpayUpi}" onclick="launchUpi('Google Pay','${gpayUpi}');return false;">GPay</a>
+              <a class="app-btn" href="${phonepeUpi}" onclick="launchUpi('PhonePe','${phonepeUpi}');return false;">PhonePe</a>
+              <a class="app-btn" href="${paytmUpi}" onclick="launchUpi('Paytm','${paytmUpi}');return false;">Paytm</a>
+              <a class="app-btn" href="${genericUpi}" onclick="launchUpi('Other UPI','${genericUpi}');return false;">Other</a>
+            </div>
+          </div>
+          <select id="payerApp">
+            <option value="Google Pay">App Used: Google Pay (GPay)</option>
+            <option value="PhonePe">App Used: PhonePe</option>
+            <option value="Paytm">App Used: Paytm</option>
+            <option value="ICICI iMobile / Other UPI">App Used: ICICI iMobile / Other UPI</option>
+          </select>
+          <input id="utrInput" inputmode="numeric" maxlength="12" placeholder="Enter 12-Digit UPI UTR / Ref No. *" style="margin-bottom:0" />`;
+      } else if (mode === "card") {
+        updateTracker("⏳ Tracker: Enter Cardholder Name, 16-digit Card Number, Expiry & CVV.", "");
+        body.innerHTML = `
+          <input id="cardHolder" placeholder="Cardholder Full Name *" />
+          <input id="cardNum" inputmode="numeric" placeholder="16-Digit Card Number *" maxlength="16" />
+          <div style="display:flex;gap:8px">
+            <input id="cardExp" placeholder="MM/YY *" maxlength="5" />
+            <input id="cardCvv" inputmode="numeric" placeholder="CVV *" maxlength="3" type="password" />
+          </div>`;
+      } else {
+        updateTracker("💵 Counter Mode: Pay ₹" + activePayable + " at the Café Delight reception counter.", "");
+        body.innerHTML = `<p style="background:var(--tint);padding:14px;border-radius:20px;font-size:0.9rem">Pay <b>₹${activePayable}</b> (incl. 5% GST) via Cash or UPI at the Café Delight reception desk.</p>`;
+      }
+    }
+
+    function verifyPayment() {
+      const btn = document.getElementById("verifyPayBtn");
+      btn.textContent = "Verifying with Bank Server...";
+      btn.disabled = true;
+
+      setTimeout(() => {
+        btn.textContent = "Verify & Issue GST Receipt →";
+        btn.disabled = false;
+        let refId = "", appUsed = "";
+
+        if (payMode === "upi") {
+          const utr = (document.getElementById("utrInput")?.value || "").trim();
+          appUsed = document.getElementById("payerApp")?.value || "UPI App";
+          if (!/^[0-9]{12}$/.test(utr)) {
+            return updateTracker("❌ PAYMENT FAILED: Invalid or missing 12-digit UPI UTR for " + UPI_ID + "!", "fail");
+          }
+          refId = "UTR" + utr;
+        } else if (payMode === "card") {
+          const holder = (document.getElementById("cardHolder")?.value || "").trim();
+          const num = (document.getElementById("cardNum")?.value || "").trim();
+          const exp = (document.getElementById("cardExp")?.value || "").trim();
+          const cvv = (document.getElementById("cardCvv")?.value || "").trim();
+          if (holder.length < 2 || !/^[0-9]{16}$/.test(num) || !/^(0[1-9]|1[0-2])\/[0-9]{2}$/.test(exp) || !/^[0-9]{3}$/.test(cvv)) {
+            return updateTracker("❌ PAYMENT FAILED: Invalid cardholder details or card declined!", "fail");
+          }
+          refId = "CARD" + Date.now().toString().slice(-6);
+          appUsed = `Card (•••• ${num.slice(-4)})`;
+        } else {
+          refId = "COUNTER-DUE";
+          appUsed = "Cash at Counter";
+        }
+
+        document.getElementById("step3Chip").classList.add("on");
+        updateTracker("✅ Payment Verified! Issuing GST receipt...", "ok");
+        setTimeout(() => {
+          closePaymentModal();
+          const timeStr = new Date().toLocaleString("en-IN", { dateStyle: "medium", timeStyle: "short" });
+          const statusLabel = payMode === "cash" ? "PAY AT COUNTER" : "PAID (VERIFIED)";
+
+          if (checkoutContext === "booking" && pendingBooking) {
+            const bookingId = "CD-TBL-" + Math.floor(1000 + Math.random() * 9000);
+            const bkRecord = {
+              bookingId,
+              timeStr,
+              name: pendingBooking.name,
+              phone: pendingBooking.phone,
+              date: pendingBooking.date,
+              guests: pendingBooking.guests,
+              slot: pendingBooking.slot,
+              amount: pendingBooking.total,
+              refId,
+              statusLabel
+            };
+            bookingLogs.unshift(bkRecord);
+            localStorage.setItem("cd_booking_logs", JSON.stringify(bookingLogs));
+            renderBookingHistory();
+
+            paymentLogs.unshift({
+              orderId: bookingId,
+              timeStr,
+              custName: pendingBooking.name,
+              custPhone: pendingBooking.phone,
+              appUsed: "Table Booking • " + appUsed,
+              refId,
+              amount: pendingBooking.total,
+              statusLabel
+            });
+            localStorage.setItem("cd_payment_logs", JSON.stringify(paymentLogs));
+            updateLogBadge();
+
+            document.getElementById("recHeading").textContent = "✅ Table Reservation Confirmed";
+            document.getElementById("receiptBody").innerHTML = `
+              <div class="rl"><span><b>Booking ID:</b> ${bookingId}</span><span><b>Ref:</b> ${refId}</span></div>
+              <div class="rl"><span><b>Guest:</b> ${pendingBooking.name} (${pendingBooking.phone})</span><span>${timeStr}</span></div>
+              <div class="rl"><span><b>Date:</b> ${pendingBooking.date}</span><span><b>Party:</b> ${pendingBooking.guests}</span></div>
+              <div class="rl"><span><b>Slot:</b> ${pendingBooking.slot}</span></div>
+              <div class="rl"><span><b>Mode:</b> ${appUsed}</span><span><b>To:</b> ${UPI_ID}</span></div>
+              <hr style="margin:8px 0;border:none;border-top:1px dashed #9cb089" />
+              <div class="rl"><span>Table Reservation Fee</span><span>₹${pendingBooking.base}</span></div>
+              <div class="rl"><span>GST (5%)</span><span>₹${pendingBooking.gst}</span></div>
+              <div class="rl" style="font-weight:800;font-size:1.06rem;color:var(--olive-deep);margin-top:4px">
+                <span>Total ${payMode === "cash" ? "Due" : "Paid"}</span><span>₹${pendingBooking.total}</span>
+              </div>
+            `;
+            document.getElementById("receiptModal").classList.add("open");
+            return;
+          }
+
+          const orderId = "CD-" + Math.floor(1000 + Math.random() * 9000);
+          const custName = document.getElementById("custName").value.trim();
+          const custPhone = document.getElementById("custPhone").value.trim();
+
+          paymentLogs.unshift({
+            orderId,
+            timeStr,
+            custName,
+            custPhone,
+            appUsed: "Order • " + appUsed,
+            refId,
+            amount: finalTotal,
+            statusLabel
+          });
+          localStorage.setItem("cd_payment_logs", JSON.stringify(paymentLogs));
+          updateLogBadge();
+
+          const itemsLines = cart.map(c => {
+            const m = MENU.find(x => x.id === c.id);
+            return `<div class="rl"><span>${m.name} × ${c.qty}</span><span>₹${m.price * c.qty}</span></div>`;
+          }).join("");
+
+          document.getElementById("recHeading").textContent = "✅ Payment Verified";
+          document.getElementById("receiptBody").innerHTML = `
+            <div class="rl"><span><b>Order ID:</b> ${orderId}</span><span><b>Ref:</b> ${refId}</span></div>
+            <div class="rl"><span><b>Customer:</b> ${custName} (${custPhone})</span><span>${timeStr}</span></div>
+            <div class="rl"><span><b>Mode:</b> ${appUsed}</span><span><b>To:</b> ${UPI_ID}</span></div>
+            <div class="rl"><span><b>Status:</b> ${statusLabel}</span><span>${document.getElementById("custSlot").value}</span></div>
+            <hr style="margin:8px 0;border:none;border-top:1px dashed #9cb089" />
+            ${itemsLines}
+            <hr style="margin:8px 0;border:none;border-top:1px dashed #9cb089" />
+            <div class="rl"><span>Subtotal</span><span>₹${subTotal}</span></div>
+            <div class="rl"><span>Discount</span><span>-₹${discAmt}</span></div>
+            <div class="rl"><span>GST (5%)</span><span>₹${gstAmt}</span></div>
+            <div class="rl" style="font-weight:800;font-size:1.06rem;color:var(--olive-deep);margin-top:4px">
+              <span>Total ${payMode === "cash" ? "Due" : "Paid"}</span><span>₹${finalTotal}</span>
+            </div>
+          `;
+          document.getElementById("receiptModal").classList.add("open");
+        }, 450);
+      }, 800);
+    }
+
+    function closeReceiptModal() {
+      document.getElementById("receiptModal").classList.remove("open");
+    }
+
+    function renderBookingHistory() {
+      document.getElementById("bkHistCount").textContent = bookingLogs.length;
+      const tbody = document.getElementById("bookingHistoryBody");
+      if (!bookingLogs.length) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:20px">No table reservations yet. Complete a table booking above to see it here.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = bookingLogs.map(b => `
+        <tr>
+          <td><b>${b.bookingId}</b><br><small class="meta">${b.timeStr}</small></td>
+          <td><b>${b.name}</b><br><small class="meta">${b.phone}</small></td>
+          <td><b>${b.date}</b><br><small class="meta">${b.slot}</small></td>
+          <td>${b.guests}</td>
+          <td><b>₹${b.amount}</b></td>
+          <td><b>${b.refId}</b></td>
+          <td><span class="tag tag-veg">${b.statusLabel}</span></td>
+        </tr>
+      `).join("");
+    }
+
+    function clearBookingHistory() {
+      if (!confirm("Clear saved table booking history?")) return;
+      bookingLogs = [];
+      localStorage.removeItem("cd_booking_logs");
+      renderBookingHistory();
+    }
+
+    function updateLogBadge() {
+      document.getElementById("logCount").textContent = paymentLogs.length;
+    }
+
+    function renderLogs() {
+      updateLogBadge();
+      const tbody = document.getElementById("logsTableBody");
+      if (!paymentLogs.length) {
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No transactions recorded yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = paymentLogs.map(log => `
+        <tr>
+          <td><b>${log.orderId}</b><br><small class="meta">${log.timeStr}</small></td>
+          <td><b>${log.custName}</b><br><small class="meta">${log.custPhone}</small></td>
+          <td>${log.appUsed}</td>
+          <td><b>${log.refId}</b></td>
+          <td><b>₹${log.amount}</b></td>
+          <td><span class="tag tag-veg">${log.statusLabel}</span></td>
+        </tr>
+      `).join("");
+    }
+
+    function clearLogs() {
+      if (!confirm("Clear all saved payment logs from this browser?")) return;
+      paymentLogs = [];
+      localStorage.removeItem("cd_payment_logs");
+      renderLogs();
+    }
+
+    renderMenu();
+    renderCart();
+    renderBookingHistory();
+    updateLogBadge();
+  </script>
+</body>
+</html>
